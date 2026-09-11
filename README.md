@@ -45,7 +45,7 @@ motto: "Automate everything, keep it lean and rock-solid."
 
 | Domain | Technologies & Tools |
 | :--- | :--- |
-| **Cloud & DevOps** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Helm](https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white) ![CI/CD](https://img.shields.io/badge/CI%2FCD-Automation-2EA44F?style=flat-square) ![Velero](https://img.shields.io/badge/Velero-Backup-326CE5?style=flat-square) |
+| **Cloud & DevOps** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Helm](https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white) ![CI/CD](https://img.shields.io/badge/CI%2FCD-Automation-2EA44F?style=flat-square) ![Proxmox](https://img.shields.io/badge/Proxmox-VE-E57000?style=flat-square) |
 | **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white) ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-336791?style=flat-square&logo=postgresql&logoColor=white) |
 | **Linux & Systems** | ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=flat-square&logo=archlinux&logoColor=white) ![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat-square&logo=debian&logoColor=white) ![KVM / libvirt](https://img.shields.io/badge/KVM%20/%20QEMU-F1502F?style=flat-square) ![MikroTik](https://img.shields.io/badge/MikroTik-RouterOS-231F20?style=flat-square) |
 | **Databases** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white) |
@@ -59,8 +59,8 @@ motto: "Automate everything, keep it lean and rock-solid."
 
 | Project | Description | Tech |
 | :--- | :--- | :--- |
-| ⚡ [**ag-repatch**](https://github.com/etosheartem/ag-repatch) | Instant, surgical same-length binary patcher for Google Antigravity region gate bypass. Zero-dependency, single file. | `Python` `Binary Patching` |
-| 🛡️ [**velero-ui**](https://github.com/etosheartem/velero-ui) | Real-time web-based UI dashboard for managing VMware Tanzu Velero backups & restores on Kubernetes. | `Kubernetes` `Velero` `Web UI` |
+| ⚡ [**ag-repatch**](https://github.com/etosheartem/ag-repatch) | Instant, surgical same-length binary patcher for Google Antigravity region gate bypass. Zero-dependency, single-file Python script. | `Python` `Reverse Engineering` `Binary Patching` |
+| 🤖 **AI & Infrastructure Tooling** | Multimodal LLM Telegram bots, autonomous AI agents, homelab networking, and Proxmox/KVM microservices orchestration. | `Python` `LLMs` `Kubernetes` `Proxmox` |
 
 ---
 
