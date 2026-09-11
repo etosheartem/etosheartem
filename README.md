@@ -67,12 +67,12 @@ motto: "Automate everything, keep it lean and rock-solid."
 ### 📊 GitHub Activity & Stats
 
 <div align="center">
-  <img height="165em" src="https://github-readme-stats.vercel.app/api?username=etosheartem&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" />
-  <img height="165em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=etosheartem&layout=compact&theme=tokyonight&hide_border=true" />
+  <img height="165em" src="https://github-readme-stats-fast.vercel.app/api?username=etosheartem&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" />
+  <img height="165em" src="https://github-readme-stats-fast.vercel.app/api/top-langs/?username=etosheartem&layout=compact&theme=tokyonight&hide_border=true" />
 </div>
 
 <div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=etosheartem&theme=tokyonight&hide_border=true" />
+  <img src="https://streak-stats.demolab.com/?user=etosheartem&theme=tokyonight&hide_border=true" />
 </div>
 
 ---
