@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the animated profile SVGs (assets/header.svg, terminal.svg, neofetch.svg).
+"""Generate the animated profile SVGs (assets/header.svg, assets/terminal.svg).
 
 GitHub READMEs strip CSS/JS, but CSS and SMIL animations inside an SVG served
 through <img> still play, so everything here is plain self-contained SVG.
@@ -170,7 +170,8 @@ class Term:
             cover = f"c{i}"
             css.append(
                 f"@keyframes {cover}{{0%,{pct(start, total)}{{transform:translateX(0)}}"
-                f"{pct(end, total)},100%{{transform:translateX({w:.1f}px)}}}}"
+                f"{pct(end, total)}{{transform:translateX({w:.1f}px);opacity:1}}"
+                f"{pct(end + self.out_gap, total)},100%{{transform:translateX({w:.1f}px);opacity:0}}}}"
                 f".{cover}{{animation:{cover} {total:.2f}s infinite;"
                 f"animation-timing-function:steps({len(data)},end)}}"
             )
@@ -221,8 +222,29 @@ class Term:
 """
 
 
+def neofetch(term: Term, row: int, t: float) -> tuple[int, float]:
+    """Run `neofetch` at `row`: Arch logo, the stack as neofetch fields, color palette."""
+    t = term.cmd(row, t, "neofetch")
+    top = row + 1
+    for i, logo_line in enumerate(ARCH_LOGO):
+        term.line(top + i, t + i * 0.03, [(logo_line, ARCH_BLUE if i < 9 else BLUE)])
+
+    info_col = max(len(l) for l in ARCH_LOGO) + 4
+    info = [
+        [("artem", ARCH_BLUE), ("@", FG), ("homelab", ARCH_BLUE)],
+        [("-" * len("artem@homelab"), FG)],
+    ] + [[(f"{key}: ", ARCH_BLUE), (value, FG)] for key, value in NEOFETCH]
+    t += 0.45
+    for i, segments in enumerate(info):
+        term.line(top + i, t + i * 0.1, segments, col=info_col)
+    t += len(info) * 0.1 + 0.2
+    term.blocks(top + len(info) + 1, t, PALETTE[0], col=info_col)
+    term.blocks(top + len(info) + 2, t + 0.15, PALETTE[1], col=info_col)
+    return top + len(ARCH_LOGO) + 1, t + 0.7
+
+
 def terminal_svg() -> str:
-    term = Term("Terminal: about Artem — Cloud & DevOps Engineer, Python Developer")
+    term = Term("Terminal: about Artem — Cloud & DevOps Engineer, Python Developer; neofetch with the tech stack")
     t, row = 0.6, 0
     for command, outputs in TERMINAL:
         t = term.cmd(row, t, command)
@@ -232,28 +254,8 @@ def terminal_svg() -> str:
             t += 0.12
             row += 1
         t += 0.55
-    return term.render(row, t)
-
-
-def neofetch_svg() -> str:
-    term = Term("neofetch: Arch Linux, " + ", ".join(v for _, v in NEOFETCH))
-    t = term.cmd(0, 0.6, "neofetch")
-    for i, logo_line in enumerate(ARCH_LOGO):
-        term.line(1 + i, t + i * 0.03, [(logo_line, ARCH_BLUE if i < 9 else BLUE)])
-
-    info_col = max(len(l) for l in ARCH_LOGO) + 4
-    info = [
-        [("artem", ARCH_BLUE), ("@", FG), ("homelab", ARCH_BLUE)],
-        [("-" * len("artem@homelab"), FG)],
-    ] + [[(f"{key}: ", ARCH_BLUE), (value, FG)] for key, value in NEOFETCH]
-    t += 0.45
-    for i, segments in enumerate(info):
-        term.line(1 + i, t + i * 0.1, segments, col=info_col)
-    t += len(info) * 0.1 + 0.2
-    term.blocks(len(info) + 2, t, PALETTE[0], col=info_col)
-    term.blocks(len(info) + 3, t + 0.15, PALETTE[1], col=info_col)
-    t += 0.7
-    return term.render(len(ARCH_LOGO) + 2, t, hold=7)
+    row, t = neofetch(term, row, t)
+    return term.render(row, t, hold=8)
 
 
 def banner_svg() -> str:
@@ -328,5 +330,4 @@ if __name__ == "__main__":
     ASSETS.mkdir(exist_ok=True)
     (ASSETS / "header.svg").write_text(banner_svg(), encoding="utf-8")
     (ASSETS / "terminal.svg").write_text(terminal_svg(), encoding="utf-8")
-    (ASSETS / "neofetch.svg").write_text(neofetch_svg(), encoding="utf-8")
-    print("wrote header.svg, terminal.svg and neofetch.svg to", ASSETS)
+    print("wrote header.svg and terminal.svg to", ASSETS)
