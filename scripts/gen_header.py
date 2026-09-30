@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generate the animated profile header SVGs (assets/header.svg, assets/terminal.svg).
+"""Generate the animated profile SVGs (assets/header.svg, terminal.svg, neofetch.svg).
 
 GitHub READMEs strip CSS/JS, but CSS and SMIL animations inside an SVG served
 through <img> still play, so everything here is plain self-contained SVG.
-Edit the TERMINAL script below and re-run: python3 scripts/gen_header.py
+Edit TERMINAL / NEOFETCH below and re-run: python3 scripts/gen_header.py
 """
 import random
 from pathlib import Path
@@ -52,6 +52,47 @@ TERMINAL = [
 ]
 PROMPT = [("artem", GREEN), ("@", COMMENT), ("homelab", BLUE), (":", COMMENT), ("~", CYAN), ("$ ", FG)]
 
+ARCH_BLUE = "#1793d1"
+ARCH_LOGO = [
+    "                  -`",
+    "                 .o+`",
+    "                `ooo/",
+    "               `+oooo:",
+    "              `+oooooo:",
+    "              -+oooooo+:",
+    "            `/:-:++oooo+:",
+    "           `/++++/+++++++:",
+    "          `/++++++++++++++:",
+    "         `/+++ooooooooooooo/`",
+    "        ./ooosssso++osssssso+`",
+    "       .oossssso-````/ossssss+`",
+    "      -osssssso.      :ssssssso.",
+    "     :osssssss/        osssso+++.",
+    "    /ossssssss/        +ssssooo/-",
+    "  `/ossssso+/:-        -:/+osssso+-",
+    " `+sso+:-`                 `.-/+oso:",
+    "`++:.                           `-/+/",
+    ".`                                 `/",
+]
+# The tech stack, neofetch style
+NEOFETCH = [
+    ("OS", "Arch Linux x86_64 · Debian"),
+    ("Virt", "KVM/QEMU · libvirt · Proxmox VE"),
+    ("Network", "MikroTik RouterOS"),
+    ("VPN", "WireGuard · AmneziaWG"),
+    ("Cloud", "Kubernetes · Docker · Helm"),
+    ("CI/CD", "GitHub Actions"),
+    ("Langs", "Python · Go · Bash · SQL"),
+    ("DB", "PostgreSQL · Redis"),
+    ("AI", "LLM Agents · Telegram Bots"),
+    ("IDE", "Google Antigravity"),
+    ("VCS", "Git"),
+]
+PALETTE = [
+    ["#15161e", "#f7768e", "#9ece6a", "#e0af68", "#7aa2f7", "#bb9af7", "#7dcfff", "#a9b1d6"],
+    ["#414868", "#ff899d", "#9fe044", "#faba4a", "#8db0ff", "#c7a9ff", "#a4daff", "#c0caf5"],
+]
+
 
 def esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
@@ -65,92 +106,110 @@ def pct(t: float, total: float) -> str:
     return f"{t / total * 100:.3f}%"
 
 
-def terminal_svg() -> str:
+class Term:
+    """A looping terminal window: typed commands, lines that pop in, then a fade and restart."""
+
     font, cw, lh = 16.5, 9.93, 25  # font size, char width, line height
-    pad_x, top = 26, 68
-    char_time, pause, out_gap = 0.075, 0.55, 0.35
-    prompt_len = sum(len(t) for t, _ in PROMPT)
+    pad_x, top, width = 26, 68, 860
+    char_time, out_gap = 0.075, 0.35
 
-    # Build the timeline: (kind, row, start, extra)
-    rows, t, row = [], 0.6, 0
-    for cmd, outputs in TERMINAL:
-        rows.append(("cmd", row, t, cmd))
-        t += len(cmd) * char_time + out_gap
-        row += 1
-        for line in outputs:
-            rows.append(("out", row, t, line))
-            t += 0.12
-            row += 1
-        t += pause
-    last_row, last_t = row, t
-    hold = 4.5
-    total = last_t + hold + 0.8
-    fade_start = last_t + hold
+    def __init__(self, label: str):
+        self.label = label
+        self.items = []  # (kind, row, col, start, data)
+        self.rows = 0
 
-    height = top + last_row * lh + 26
-    width = 860
-    css, body = [], []
+    def x(self, col: float) -> float:
+        return self.pad_x + col * self.cw
 
-    def appear(name: str, start: float) -> None:
-        css.append(
-            f"@keyframes {name}{{0%,{pct(start, total)}{{opacity:0}}"
-            f"{pct(start + 0.01, total)},100%{{opacity:1}}}}"
-            f".{name}{{opacity:0;animation:{name} {total:.2f}s infinite}}"
-        )
+    def cmd(self, row: int, start: float, command: str) -> float:
+        """Type a command after the prompt; returns when its output may start."""
+        self.items.append(("cmd", row, 0, start, command))
+        self.rows = max(self.rows, row + 1)
+        return start + len(command) * self.char_time + self.out_gap
 
-    for i, (kind, r, start, data) in enumerate(rows):
-        y = top + r * lh
-        name = f"r{i}"
-        if kind == "out":
+    def line(self, row: int, start: float, segments, col: float = 0) -> None:
+        self.items.append(("out", row, col, start, segments))
+        self.rows = max(self.rows, row + 1)
+
+    def blocks(self, row: int, start: float, colors, col: float = 0, size: int = 3) -> None:
+        self.items.append(("blocks", row, col, start, (colors, size)))
+        self.rows = max(self.rows, row + 1)
+
+    def render(self, idle_row: int, idle_at: float, hold: float = 4.5) -> str:
+        font, cw, lh, top = self.font, self.cw, self.lh, self.top
+        total = idle_at + hold + 0.8
+        fade_start = idle_at + hold
+        prompt_len = sum(len(t) for t, _ in PROMPT)
+        css, body = [], []
+
+        def appear(name: str, start: float) -> None:
+            css.append(
+                f"@keyframes {name}{{0%,{pct(start, total)}{{opacity:0}}"
+                f"{pct(start + 0.01, total)},100%{{opacity:1}}}}"
+                f".{name}{{opacity:0;animation:{name} {total:.2f}s infinite}}"
+            )
+
+        for i, (kind, row, col, start, data) in enumerate(self.items):
+            y, x, name = top + row * lh, self.x(col), f"r{i}"
             appear(name, start)
-            body.append(f'<text class="{name}" x="{pad_x}" y="{y}">{spans(data)}</text>')
-            continue
-        # Prompt line: prompt appears, then the command is revealed char by char
-        appear(name, start)
-        cx = pad_x + prompt_len * cw
-        w = len(data) * cw
-        end = start + len(data) * char_time
-        cover = f"c{i}"
-        css.append(
-            f"@keyframes {cover}{{0%,{pct(start, total)}{{transform:translateX(0)}}"
-            f"{pct(end, total)},100%{{transform:translateX({w:.1f}px)}}}}"
-            f".{cover}{{animation:{cover} {total:.2f}s infinite;"
-            f"animation-timing-function:steps({len(data)},end)}}"
-        )
-        # Cursor rides on the cover's left edge while typing, then hides once output starts
-        cur = f"k{i}"
-        css.append(
-            f"@keyframes {cur}{{0%,{pct(start, total)}{{opacity:0}}"
-            f"{pct(start + 0.01, total)},{pct(end + out_gap - 0.02, total)}{{opacity:1}}"
-            f"{pct(end + out_gap, total)},100%{{opacity:0}}}}"
-            f".{cur}{{opacity:0;animation:{cur} {total:.2f}s infinite}}"
-        )
+            if kind == "out":
+                body.append(f'<text class="{name}" x="{x:.1f}" y="{y}">{spans(data)}</text>')
+                continue
+            if kind == "blocks":
+                colors, size = data
+                rects = "".join(
+                    f'<rect x="{x + j * size * cw:.1f}" y="{y - font + 1}" width="{size * cw:.1f}" height="{lh - 3}" fill="{c}"/>'
+                    for j, c in enumerate(colors)
+                )
+                body.append(f'<g class="{name}">{rects}</g>')
+                continue
+            # Prompt line: prompt appears, then the command is revealed char by char
+            cx = self.x(prompt_len)
+            w = len(data) * cw
+            end = start + len(data) * self.char_time
+            cover = f"c{i}"
+            css.append(
+                f"@keyframes {cover}{{0%,{pct(start, total)}{{transform:translateX(0)}}"
+                f"{pct(end, total)},100%{{transform:translateX({w:.1f}px)}}}}"
+                f".{cover}{{animation:{cover} {total:.2f}s infinite;"
+                f"animation-timing-function:steps({len(data)},end)}}"
+            )
+            # Cursor rides on the cover's left edge while typing, then hides once output starts
+            cur = f"k{i}"
+            css.append(
+                f"@keyframes {cur}{{0%,{pct(start, total)}{{opacity:0}}"
+                f"{pct(start + 0.01, total)},{pct(end + self.out_gap - 0.02, total)}{{opacity:1}}"
+                f"{pct(end + self.out_gap, total)},100%{{opacity:0}}}}"
+                f".{cur}{{opacity:0;animation:{cur} {total:.2f}s infinite}}"
+            )
+            body.append(
+                f'<g class="{name}"><text x="{x:.1f}" y="{y}">{spans(PROMPT)}'
+                f'<tspan fill="{FG}">{esc(data)}</tspan></text>'
+                f'<g class="{cover}"><rect x="{cx:.1f}" y="{y - font}" width="{w + cw * 2:.1f}" height="{lh}" fill="{BG}"/>'
+                f'<rect class="{cur}" x="{cx:.1f}" y="{y - font + 2}" width="{cw:.1f}" height="{font + 3}" fill="{FG}"/></g></g>'
+            )
+
+        # Final idle prompt with a blinking cursor
+        y = top + idle_row * lh
+        appear("fin", idle_at)
         body.append(
-            f'<g class="{name}"><text x="{pad_x}" y="{y}">{spans(PROMPT)}'
-            f'<tspan fill="{FG}">{esc(data)}</tspan></text>'
-            f'<g class="{cover}"><rect x="{cx:.1f}" y="{y - font}" width="{w + cw * 2:.1f}" height="{lh}" fill="{BG}"/>'
-            f'<rect class="{cur}" x="{cx:.1f}" y="{y - font + 2}" width="{cw:.1f}" height="{font + 3}" fill="{FG}"/></g></g>'
+            f'<g class="fin"><text x="{self.pad_x}" y="{y}">{spans(PROMPT)}</text>'
+            f'<rect class="blink" x="{self.x(prompt_len):.1f}" y="{y - font + 2}" width="{cw:.1f}" height="{font + 3}" fill="{FG}"/></g>'
         )
+        css.append("@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}.blink{animation:blink 1s step-end infinite}")
+        css.append(
+            f"@keyframes screen{{0%,{pct(fade_start, total)}{{opacity:1}}{pct(total - 0.15, total)},100%{{opacity:0}}}}"
+            f".screen{{animation:screen {total:.2f}s infinite}}"
+        )
+        css.append(f"text{{font-family:{MONO};font-size:{font}px;white-space:pre}}")
 
-    # Final idle prompt with a blinking cursor
-    y = top + last_row * lh
-    appear("fin", last_t)
-    body.append(
-        f'<g class="fin"><text x="{pad_x}" y="{y}">{spans(PROMPT)}</text>'
-        f'<rect class="blink" x="{pad_x + prompt_len * cw:.1f}" y="{y - font + 2}" width="{cw:.1f}" height="{font + 3}" fill="{FG}"/></g>'
-    )
-    css.append("@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}.blink{animation:blink 1s step-end infinite}")
-    css.append(
-        f"@keyframes screen{{0%,{pct(fade_start, total)}{{opacity:1}}{pct(total - 0.15, total)},100%{{opacity:0}}}}"
-        f".screen{{animation:screen {total:.2f}s infinite}}"
-    )
-    css.append(f"text{{font-family:{MONO};font-size:{font}px;white-space:pre}}")
-
-    dots = "".join(
-        f'<circle cx="{22 + i * 20}" cy="20" r="6" fill="{c}"/>'
-        for i, c in enumerate(["#f7768e", YELLOW, GREEN])
-    )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Terminal: about Artem — Cloud &amp; DevOps Engineer, Python Developer">
+        width = self.width
+        height = top + idle_row * lh + 26
+        dots = "".join(
+            f'<circle cx="{22 + i * 20}" cy="20" r="6" fill="{c}"/>'
+            for i, c in enumerate(["#f7768e", YELLOW, GREEN])
+        )
+        return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="{esc(self.label)}">
 <style>{"".join(css)}</style>
 <defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{BLUE}"/><stop offset="1" stop-color="{PURPLE}"/></linearGradient></defs>
 <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="12" fill="{BG}" stroke="url(#edge)" stroke-opacity="0.55" stroke-width="1.5"/>
@@ -160,6 +219,41 @@ def terminal_svg() -> str:
 <g class="screen" xml:space="preserve">{"".join(body)}</g>
 </svg>
 """
+
+
+def terminal_svg() -> str:
+    term = Term("Terminal: about Artem — Cloud & DevOps Engineer, Python Developer")
+    t, row = 0.6, 0
+    for command, outputs in TERMINAL:
+        t = term.cmd(row, t, command)
+        row += 1
+        for segments in outputs:
+            term.line(row, t, segments)
+            t += 0.12
+            row += 1
+        t += 0.55
+    return term.render(row, t)
+
+
+def neofetch_svg() -> str:
+    term = Term("neofetch: Arch Linux, " + ", ".join(v for _, v in NEOFETCH))
+    t = term.cmd(0, 0.6, "neofetch")
+    for i, logo_line in enumerate(ARCH_LOGO):
+        term.line(1 + i, t + i * 0.03, [(logo_line, ARCH_BLUE if i < 9 else BLUE)])
+
+    info_col = max(len(l) for l in ARCH_LOGO) + 4
+    info = [
+        [("artem", ARCH_BLUE), ("@", FG), ("homelab", ARCH_BLUE)],
+        [("-" * len("artem@homelab"), FG)],
+    ] + [[(f"{key}: ", ARCH_BLUE), (value, FG)] for key, value in NEOFETCH]
+    t += 0.45
+    for i, segments in enumerate(info):
+        term.line(1 + i, t + i * 0.1, segments, col=info_col)
+    t += len(info) * 0.1 + 0.2
+    term.blocks(len(info) + 2, t, PALETTE[0], col=info_col)
+    term.blocks(len(info) + 3, t + 0.15, PALETTE[1], col=info_col)
+    t += 0.7
+    return term.render(len(ARCH_LOGO) + 2, t, hold=7)
 
 
 def banner_svg() -> str:
@@ -234,4 +328,5 @@ if __name__ == "__main__":
     ASSETS.mkdir(exist_ok=True)
     (ASSETS / "header.svg").write_text(banner_svg(), encoding="utf-8")
     (ASSETS / "terminal.svg").write_text(terminal_svg(), encoding="utf-8")
-    print("wrote", ASSETS / "header.svg", "and", ASSETS / "terminal.svg")
+    (ASSETS / "neofetch.svg").write_text(neofetch_svg(), encoding="utf-8")
+    print("wrote header.svg, terminal.svg and neofetch.svg to", ASSETS)
