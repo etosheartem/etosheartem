@@ -27,17 +27,27 @@ SANS = "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 # Each step: a typed command followed by its output lines.
 # Output lines are lists of (text, color) segments.
 TERMINAL = [
-    ("whoami", [
-        [("Artem", PURPLE), (" — Cloud & DevOps Engineer · Python Developer", FG)],
+    ("cat about.yaml", [
+        [("name", BLUE), (": ", COMMENT), ("Artem", GREEN)],
+        [("role", BLUE), (": ", COMMENT), ("Cloud & DevOps Engineer / Python Developer", GREEN)],
+        [("focus", BLUE), (":", COMMENT)],
+        [("  - ", COMMENT), ("Cloud-Native Infrastructure & Kubernetes", GREEN)],
+        [("  - ", COMMENT), ("System Automation & Internal Tooling", GREEN)],
+        [("  - ", COMMENT), ("AI Agents & LLM Integrations", GREEN)],
+        [("current_stack", BLUE), (": [", COMMENT), ("Kubernetes, Python, Docker, Linux, MikroTik", GREEN), ("]", COMMENT)],
+        [("motto", BLUE), (": ", COMMENT), ('"Automate everything, keep it lean and rock-solid."', YELLOW)],
+    ]),
+    ("ls ~/work", [
+        [("devops/    ", BLUE), ("Kubernetes · Docker · Helm — reliable infrastructure", FG)],
+        [("python/    ", BLUE), ("CLI tools · async microservices · Telegram bots · AI agents", FG)],
+        [("homelab/   ", BLUE), ("Arch · KVM/libvirt · MikroTik RouterOS · WireGuard/AmneziaWG", FG)],
+        [("lowlevel/  ", BLUE), ("reverse engineering · binary patching (ag-repatch) · perf", FG)],
     ]),
     ("kubectl get pods -n tooling", [
         [("NAME                 READY   STATUS    AGE", COMMENT)],
         [("telegram-llm-bot     1/1     ", FG), ("Running", GREEN), ("   42d", FG)],
         [("ai-agent-worker      1/1     ", FG), ("Running", GREEN), ("   17d", FG)],
         [("ag-repatch           1/1     ", FG), ("Running", GREEN), ("   9d", FG)],
-    ]),
-    ("cat motto.txt", [
-        [("Automate everything, keep it lean and rock-solid.", YELLOW)],
     ]),
 ]
 PROMPT = [("artem", GREEN), ("@", COMMENT), ("homelab", BLUE), (":", COMMENT), ("~", CYAN), ("$ ", FG)]
@@ -56,8 +66,8 @@ def pct(t: float, total: float) -> str:
 
 
 def terminal_svg() -> str:
-    font, cw, lh = 15, 9.0, 23  # font size, char width, line height
-    pad_x, top = 22, 62
+    font, cw, lh = 16.5, 9.93, 25  # font size, char width, line height
+    pad_x, top = 26, 68
     char_time, pause, out_gap = 0.075, 0.55, 0.35
     prompt_len = sum(len(t) for t, _ in PROMPT)
 
@@ -78,7 +88,7 @@ def terminal_svg() -> str:
     fade_start = last_t + hold
 
     height = top + last_row * lh + 26
-    width = 760
+    width = 860
     css, body = [], []
 
     def appear(name: str, start: float) -> None:
@@ -140,13 +150,13 @@ def terminal_svg() -> str:
         f'<circle cx="{22 + i * 20}" cy="20" r="6" fill="{c}"/>'
         for i, c in enumerate(["#f7768e", YELLOW, GREEN])
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Terminal: whoami — Artem, Cloud &amp; DevOps Engineer">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-label="Terminal: about Artem — Cloud &amp; DevOps Engineer, Python Developer">
 <style>{"".join(css)}</style>
 <defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{BLUE}"/><stop offset="1" stop-color="{PURPLE}"/></linearGradient></defs>
 <rect x="1" y="1" width="{width - 2}" height="{height - 2}" rx="12" fill="{BG}" stroke="url(#edge)" stroke-opacity="0.55" stroke-width="1.5"/>
 <path d="M1 13a12 12 0 0 1 12-12h{width - 26}a12 12 0 0 1 12 12v27H1z" fill="{BG_DARK}"/>
 {dots}
-<text x="{width / 2}" y="25" text-anchor="middle" fill="{COMMENT}" style="font-size:13px">artem@homelab: ~</text>
+<text x="{width / 2}" y="25" text-anchor="middle" fill="{COMMENT}" style="font-size:14px">artem@homelab: ~</text>
 <g class="screen" xml:space="preserve">{"".join(body)}</g>
 </svg>
 """
