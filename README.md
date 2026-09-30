@@ -1,11 +1,11 @@
 <div align="center">
 
 <!-- Header Dynamic Banner -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=24,18,36,45&height=200&section=header&text=Hi%20there,%20I'm%20Artem%20👋&fontSize=44&fontColor=ffffff&animation=fadeIn&fontAlignY=38" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:1a1b27,55:3d59a1,100:bb9af7&height=200&section=header&text=Hi%20there,%20I'm%20Artem%20👋&fontSize=44&fontColor=ffffff&animation=fadeIn&fontAlignY=38" width="100%" />
 
 <!-- Animated Typing Subtitle -->
 <a href="https://github.com/etosheartem">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=21&duration=3000&pause=1000&color=38BDF8&center=true&vCenter=true&width=620&lines=Cloud+%26+DevOps+Engineer;Python+%26+Backend+Developer;Linux+%26+Systems+Enthusiast;Building+Reliable+Tooling+%26+AI+Agents" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=21&duration=3000&pause=1000&color=70A5FD&center=true&vCenter=true&width=620&lines=Cloud+%26+DevOps+Engineer;Python+%26+Backend+Developer;Linux+%26+Systems+Enthusiast;Building+Reliable+Tooling+%26+AI+Agents" alt="Typing SVG" />
 </a>
 
 <br/>
@@ -45,34 +45,53 @@ motto: "Automate everything, keep it lean and rock-solid."
 
 | Domain | Technologies & Tools |
 | :--- | :--- |
-| **Cloud & DevOps** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Helm](https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white) ![CI/CD](https://img.shields.io/badge/CI%2FCD-Automation-2EA44F?style=flat-square) ![Proxmox](https://img.shields.io/badge/Proxmox-VE-E57000?style=flat-square) |
+| **Cloud & DevOps** | ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Helm](https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white) ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white) ![Proxmox](https://img.shields.io/badge/Proxmox_VE-E57000?style=flat-square&logo=proxmox&logoColor=white) |
 | **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white) ![Go](https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white) ![SQL](https://img.shields.io/badge/SQL-336791?style=flat-square&logo=postgresql&logoColor=white) |
-| **Linux & Systems** | ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=flat-square&logo=archlinux&logoColor=white) ![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat-square&logo=debian&logoColor=white) ![KVM / libvirt](https://img.shields.io/badge/KVM%20/%20QEMU-F1502F?style=flat-square) ![MikroTik](https://img.shields.io/badge/MikroTik-RouterOS-231F20?style=flat-square) |
+| **Linux & Systems** | ![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=flat-square&logo=archlinux&logoColor=white) ![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat-square&logo=debian&logoColor=white) ![KVM / QEMU](https://img.shields.io/badge/KVM_/_QEMU-FF6600?style=flat-square&logo=qemu&logoColor=white) ![MikroTik](https://img.shields.io/badge/MikroTik_RouterOS-293239?style=flat-square&logo=mikrotik&logoColor=white) ![WireGuard](https://img.shields.io/badge/WireGuard-88171A?style=flat-square&logo=wireguard&logoColor=white) |
 | **Databases** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white) |
-| **AI & Workflow** | ![Antigravity](https://img.shields.io/badge/Google_Antigravity-4285F4?style=flat-square&logo=google&logoColor=white) ![LLM Agents](https://img.shields.io/badge/AI_Agents-Autonomous-8A2BE2?style=flat-square) ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white) |
+| **AI & Workflow** | ![Antigravity](https://img.shields.io/badge/Google_Antigravity-4285F4?style=flat-square&logo=google&logoColor=white) ![LLM Agents](https://img.shields.io/badge/AI_Agents-Autonomous-8A2BE2?style=flat-square&logo=probot&logoColor=white) ![Telegram Bots](https://img.shields.io/badge/Telegram_Bots-26A5E4?style=flat-square&logo=telegram&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white) |
 
 </div>
 
 ---
 
-### 🌟 Featured Projects
+### 🌟 Featured Project
 
-| Project | Description | Tech |
-| :--- | :--- | :--- |
-| ⚡ [**ag-repatch**](https://github.com/etosheartem/ag-repatch) | Instant, surgical same-length binary patcher for Google Antigravity region gate bypass. Zero-dependency, single-file Python script. | `Python` `Reverse Engineering` `Binary Patching` |
-| 🤖 **AI & Infrastructure Tooling** | Multimodal LLM Telegram bots, autonomous AI agents, homelab networking, and Proxmox/KVM microservices orchestration. | `Python` `LLMs` `Kubernetes` `Proxmox` |
+<table>
+  <tr>
+    <td>
+      <h3>⚡ <a href="https://github.com/etosheartem/ag-repatch">ag-repatch</a></h3>
+      <p>Instant, surgical same-length binary patcher for Google Antigravity region gate bypass. Zero-dependency, single-file Python script.</p>
+      <p>
+        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+        <img src="https://img.shields.io/badge/Reverse_Engineering-1a1b27?style=flat-square" />
+        <img src="https://img.shields.io/badge/Binary_Patching-1a1b27?style=flat-square" />
+        <a href="https://github.com/etosheartem/ag-repatch/stargazers"><img src="https://img.shields.io/github/stars/etosheartem/ag-repatch?style=flat-square&color=70a5fd&labelColor=1a1b27" /></a>
+      </p>
+    </td>
+  </tr>
+</table>
+
+### 🔭 Currently Working On
+
+- 🤖 Multimodal LLM Telegram bots and autonomous AI agents
+- 🏠 Homelab: Proxmox/KVM microservices orchestration, Kubernetes, MikroTik + WireGuard/AmneziaWG networking
 
 ---
 
 ### 📊 GitHub Activity & Stats
 
+<!-- Rendered daily by .github/workflows/profile.yml — no third-party card services -->
 <div align="center">
-  <img height="165em" src="https://github-readme-stats-fast.vercel.app/api?username=etosheartem&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" />
-  <img height="165em" src="https://github-readme-stats-fast.vercel.app/api/top-langs/?username=etosheartem&layout=compact&theme=tokyonight&hide_border=true" />
+  <img src="github-metrics.svg" alt="GitHub metrics" />
 </div>
 
 <div align="center">
-  <img src="https://streak-stats.demolab.com/?user=etosheartem&theme=tokyonight&hide_border=true" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake.svg" />
+    <img alt="Contribution snake" src="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake-dark.svg" />
+  </picture>
 </div>
 
 ---
@@ -80,6 +99,6 @@ motto: "Automate everything, keep it lean and rock-solid."
 <div align="center">
 
 <!-- Footer Wave -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=24,18,36,45&height=90&section=footer" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:bb9af7,45:3d59a1,100:1a1b27&height=90&section=footer" width="100%" />
 
 </div>
