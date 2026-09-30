@@ -76,23 +76,6 @@ motto: "Automate everything, keep it lean and rock-solid."
 
 ---
 
-### 📊 GitHub Activity & Stats
-
-<!-- Rendered daily by .github/workflows/profile.yml — no third-party card services -->
-<div align="center">
-  <img src="github-metrics.svg" alt="GitHub metrics" />
-</div>
-
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake.svg" />
-    <img alt="Contribution snake" src="https://raw.githubusercontent.com/etosheartem/etosheartem/output/github-snake-dark.svg" />
-  </picture>
-</div>
-
----
-
 <div align="center">
 
 <!-- Footer Wave -->
