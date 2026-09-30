@@ -52,30 +52,6 @@ motto: "Automate everything, keep it lean and rock-solid."
 
 ---
 
-### 🌟 Featured Project
-
-<table>
-  <tr>
-    <td>
-      <h3>⚡ <a href="https://github.com/etosheartem/ag-repatch">ag-repatch</a></h3>
-      <p>Instant, surgical same-length binary patcher for Google Antigravity region gate bypass. Zero-dependency, single-file Python script.</p>
-      <p>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
-        <img src="https://img.shields.io/badge/Reverse_Engineering-1a1b27?style=flat-square" />
-        <img src="https://img.shields.io/badge/Binary_Patching-1a1b27?style=flat-square" />
-        <a href="https://github.com/etosheartem/ag-repatch/stargazers"><img src="https://img.shields.io/github/stars/etosheartem/ag-repatch?style=flat-square&color=70a5fd&labelColor=1a1b27" /></a>
-      </p>
-    </td>
-  </tr>
-</table>
-
-### 🔭 Currently Working On
-
-- 🤖 Multimodal LLM Telegram bots and autonomous AI agents
-- 🏠 Homelab: Proxmox/KVM microservices orchestration, Kubernetes, MikroTik + WireGuard/AmneziaWG networking
-
----
-
 <div align="center">
 
 <!-- Footer Wave -->
