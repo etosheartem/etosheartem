@@ -1,167 +1,160 @@
 #!/usr/bin/env python3
-"""Build the profile illustrations: python3 scripts/gen_header.py.
+"""Render the profile's Kubernetes pod typography with the standard library.
 
-Standard library only. SVGs are self-contained; content never depends on motion.
-The README selects light, dark, and narrow-screen header variants.
+Run from any directory: python3 scripts/gen_header.py
+The topology is an illustration, not cluster telemetry. A 12-second loop removes
+one letter's pod and reconciles it. Reduced-motion mode preserves the full name.
 """
 from html import escape
+from math import cos, sin, pi
 from pathlib import Path
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 THEMES = {
-    "dark": dict(bg="#111914", panel="#19231c", fg="#f1f3e8", muted="#a4b2a2",
-                 line="#344638", accent="#c5f277", orange="#ffc18c", violet="#c4b5fd", ink="#162014"),
-    "light": dict(bg="#f3f2e8", panel="#e7e9dc", fg="#202c22", muted="#596752",
-                  line="#bdc7b3", accent="#507628", orange="#a65328", violet="#7553a4", ink="#f8f7ef"),
+    "dark": dict(bg="#090c13", panel="#101725", fg="#f0f5ff", muted="#8fa3c2",
+                 line="#253550", grid="#121d30", blue="#568eff", pod="#3d7cff",
+                 edge="#95baff", cyan="#87e5ef", orange="#ffc280"),
+    "light": dict(bg="#f6f8ff", panel="#edf2ff", fg="#122441", muted="#536783",
+                  line="#b7c7e3", grid="#e0e8f6", blue="#245ad7", pod="#326ce5",
+                  edge="#1b4eb8", cyan="#00697a", orange="#a84813"),
+}
+LETTERS = {
+    "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    "R": ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+    "T": ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+    "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    "M": ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
 }
 SANS = "Arial, Helvetica, 'DejaVu Sans', sans-serif"
 MONO = "'DejaVu Sans Mono', Consolas, monospace"
 
 
-def text(x, y, value, *, size=16, fill="fg", weight=400, mono=False, extra=""):
-    return (f'<text x="{x}" y="{y}" fill="{{{fill}}}" font-size="{size}" '
-            f'font-weight="{weight}" font-family="{MONO if mono else SANS}" '
-            f'{extra}>{escape(value)}</text>')
+def text(x, y, value, size=16, color="fg", *, weight=400, mono=True, extra=""):
+    return (f'<text x="{x}" y="{y}" fill="{{{color}}}" font-family="{MONO if mono else SANS}" '
+            f'font-size="{size}" font-weight="{weight}" {extra}>{escape(value)}</text>')
 
 
-def svg(width, height, title, description, body, theme):
-    c = THEMES[theme]
-    for key, value in c.items():
-        body = body.replace("{" + key + "}", value)
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}"
-  viewBox="0 0 {width} {height}" role="img" aria-labelledby="title description">
-  <title id="title">{escape(title)}</title>
-  <desc id="description">{escape(description)}</desc>
+def wheel(x, y, scale=1):
+    points = " ".join(f"{66*cos(-pi/2+i*2*pi/7):.2f},{66*sin(-pi/2+i*2*pi/7):.2f}" for i in range(7))
+    result = f'<g transform="translate({x} {y}) scale({scale})">'
+    result += '<circle r="83" fill="none" stroke="{line}" stroke-dasharray="1 7"/>'
+    result += '<circle class="orbit" r="76" fill="none" stroke="{blue}" stroke-width="2" stroke-dasharray="25 452"/>'
+    result += f'<polygon points="{points}" fill="#326ce5"/>'
+    result += '<g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="6">'
+    result += '<circle r="29"/>'
+    for i in range(7):
+        a = -pi/2 + i*2*pi/7
+        result += f'<path d="M{12*cos(a):.2f} {12*sin(a):.2f}L{47*cos(a):.2f} {47*sin(a):.2f}"/>'
+    result += '</g><circle r="9" fill="#ffffff"/></g>'
+    return result
+
+
+def node(letter, x, y, compact=False):
+    width, height, cell, step, padx, pady = (104, 160, 12, 16, 14, 32) if compact else (190, 270, 24, 30, 23, 42)
+    result = f'<g><title>Worker {letter.lower()}: pods form the letter {letter}</title>'
+    result += f'<rect x="{x}" y="{y}" width="{width}" height="{height}" fill="{{panel}}" stroke="{{line}}"/>'
+    result += f'<path d="M{x} {y+10}v-10h10M{x+width-10} {y+height}h10v-10" stroke="{{blue}}" stroke-width="2" fill="none"/>'
+    result += text(x+10, y+20 if compact else y+25, f"worker-{letter.lower()}", 10 if compact else 13, "muted")
+    for row, pattern in enumerate(LETTERS[letter]):
+        for col, on in enumerate(pattern):
+            px, py = x+padx+col*step, y+pady+row*step
+            result += f'<rect x="{px}" y="{py}" width="{cell}" height="{cell}" rx="1" fill="none" stroke="{{grid}}"/>'
+            if on == "0":
+                continue
+            changing = letter == "T" and row == 4 and col == 2
+            cls = ' class="recreated-pod"' if changing else ''
+            result += f'<g{cls}><rect x="{px}" y="{py}" width="{cell}" height="{cell}" rx="1" fill="{{pod}}"/>'
+            result += f'<path d="M{px+3} {py+cell-3}h{cell-6}" stroke="{{edge}}" stroke-width="1"/></g>'
+            if changing:
+                result += f'<rect class="missing-pod" x="{px-2}" y="{py-2}" width="{cell+4}" height="{cell+4}" fill="none" stroke="{{orange}}" stroke-dasharray="3 3"/>'
+    result += '</g>'
+    return result
+
+
+def state(x, y, compact=False):
+    size = 15 if compact else 16
+    result = text(x, y, "desired: ARTEM", size, "muted")
+    dx = x if compact else x+400
+    dy = y+30 if compact else y
+    for cls, value, color in [
+        ("phase-steady", "observed = desired", "cyan"),
+        ("phase-drift", "pod lost / drift detected", "orange"),
+        ("phase-reconcile", "reconciling / creating pod", "blue"),
+    ]:
+        result += text(dx, dy, value, size, color, extra=f'class="{cls}"')
+    return result
+
+
+def header(theme, mobile=False):
+    w, h = (640, 724) if mobile else (1120, 668)
+    body = f'<rect width="{w}" height="{h}" fill="{{bg}}"/>'
+    body += f'<rect x="1" y="1" width="{w-2}" height="{h-2}" fill="url(#grid)" stroke="{{line}}"/>'
+    body += f'<path d="M24 59H{w-24}" stroke="{{line}}"/>'
+    body += text(28, 37, "ARTEM / CLOUD & DEVOPS", 13 if mobile else 15)
+    body += text(w-28, 37, "ctx: etosheartem", 12 if mobile else 14, "muted", extra='text-anchor="end"')
+    if mobile:
+        body += text(26, 135, "KUBERNETES", 67, weight=800, mono=False, extra='letter-spacing="-3"')
+        body += text(30, 173, "LINUX / HELM / AUTOMATION", 17, "muted")
+        body += wheel(320, 280, .9)
+        body += text(320, 382, "deployment / identity", 15, "muted", extra='text-anchor="middle"')
+        body += '<path d="M320 355V403M82 403H558" fill="none" stroke="{line}"/>'
+        for i, letter in enumerate(LETTERS):
+            x = 30+i*119
+            body += f'<path d="M{x+52} 403V426" stroke="{{blue}}" fill="none"/>'
+            body += node(letter, x, 426, True)
+        body += '<path d="M30 619H610" stroke="{line}"/>'
+        body += state(30, 652, True)
+        body += text(610, 682, "↺", 28, "blue", extra='text-anchor="end"')
+    else:
+        body += text(29, 160, "KUBERNETES", 100, weight=800, mono=False, extra='letter-spacing="-5"')
+        body += text(36, 202, "LINUX / HELM / AUTOMATION", 20, "muted")
+        body += wheel(974, 155)
+        body += '<path d="M974 239V266M127 266H983" stroke="{line}" fill="none"/>'
+        body += '<rect x="376" y="250" width="367" height="30" fill="{bg}"/>'
+        body += text(560, 271, "deployment / identity", 17, "muted", extra='text-anchor="middle"')
+        for i, letter in enumerate(LETTERS):
+            x = 32+i*214
+            body += f'<path d="M{x+95} 266V304" stroke="{{line}}" fill="none"/>'
+            body += f'<path class="traffic" d="M{x+95} 266V304" stroke="{{blue}}" stroke-width="2" fill="none"/>'
+            body += node(letter, x, 304)
+        body += '<path d="M32 608H1088" stroke="{line}"/>'
+        body += state(36, 642)
+        body += text(1082, 642, "↺ reconcile()", 15, "blue", extra='text-anchor="end"')
+    colors = THEMES[theme]
+    for key, value in colors.items():
+        body = body.replace("{"+key+"}", value)
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"
+  role="img" aria-labelledby="title desc">
+  <title id="title">Artem / Kubernetes — a name built from pods</title>
+  <desc id="desc">Артём, Cloud и DevOps. Схема Kubernetes: поды на пяти узлах складываются в ARTEM.
+  Один под исчезает и восстанавливается в анимации reconciliation. Это иллюстрация профиля.</desc>
   <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-    <circle cx="1" cy="1" r="0.8" fill="{c['line']}"/>
+    <path d="M24 0H0V24" fill="none" stroke="{colors['grid']}" stroke-width=".5"/>
   </pattern></defs>
   <style>
-    .flow {{ stroke-dasharray: 4 16; animation: flow 18s linear infinite; }}
-    @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
-    @media (prefers-reduced-motion: reduce) {{ .flow {{ animation: none; }} }}
+    .orbit {{ animation: orbit 12s linear infinite; }}
+    .traffic {{ stroke-dasharray: 4 34; animation: traffic 3s linear infinite; }}
+    .recreated-pod {{ animation: pod 12s linear infinite; }}
+    .missing-pod {{ opacity: 0; animation: missing 12s linear infinite; }}
+    .phase-steady {{ animation: steady 12s step-end infinite; }}
+    .phase-drift {{ opacity: 0; animation: drift 12s step-end infinite; }}
+    .phase-reconcile {{ opacity: 0; animation: reconcile 12s step-end infinite; }}
+    @keyframes orbit {{ to {{ stroke-dashoffset: -477; }} }}
+    @keyframes traffic {{ to {{ stroke-dashoffset: -38; }} }}
+    @keyframes pod {{ 0%,27% {{ opacity:1; }} 30%,55% {{ opacity:0; }} 65%,100% {{ opacity:1; }} }}
+    @keyframes missing {{ 0%,27% {{ opacity:0; }} 30%,55% {{ opacity:1; }} 65%,100% {{ opacity:0; }} }}
+    @keyframes steady {{ 0% {{ opacity:1; }} 28% {{ opacity:0; }} 66% {{ opacity:1; }} }}
+    @keyframes drift {{ 0% {{ opacity:0; }} 28% {{ opacity:1; }} 45% {{ opacity:0; }} }}
+    @keyframes reconcile {{ 0% {{ opacity:0; }} 45% {{ opacity:1; }} 66% {{ opacity:0; }} }}
+    @media (prefers-reduced-motion: reduce) {{
+      * {{ animation:none !important; }}
+      .recreated-pod, .phase-steady {{ opacity:1; }}
+      .missing-pod, .phase-drift, .phase-reconcile {{ opacity:0; }}
+    }}
   </style>
   {body}
 </svg>
 '''
-
-
-def routing_art():
-    return '''
-    <circle cx="878" cy="199" r="142" fill="none" stroke="{line}"/>
-    <circle cx="878" cy="199" r="110" fill="none" stroke="{line}" stroke-dasharray="2 10"/>
-    <path d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
-      fill="none" stroke="{line}" stroke-width="2"/>
-    <path class="flow" d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
-      fill="none" stroke="{accent}" stroke-width="2"/>
-    <g transform="translate(878 199)">
-      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="{bg}" stroke="{line}" transform="rotate(-21)"/>
-      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="{panel}" stroke="{line}" transform="rotate(-10)"/>
-      <rect x="-61" y="-61" width="122" height="122" rx="22" fill="{accent}"/>
-      <path d="M-31 23L-3-29H9L36 23M-19 1H22M-4 24H9" fill="none"
-        stroke="{ink}" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter"/>
-    </g>
-    <g fill="{bg}" stroke="{line}" stroke-width="1.5">
-      <rect x="654" y="77" width="62" height="62" rx="14"/>
-      <rect x="985" y="66" width="62" height="62" rx="14"/>
-      <rect x="993" y="261" width="62" height="62" rx="14"/>
-    </g>
-    <g fill="none" stroke="{accent}" stroke-width="2">
-      <rect x="670" y="91" width="30" height="12" rx="2"/>
-      <rect x="670" y="111" width="30" height="12" rx="2"/>
-      <path d="M675 97h3M675 117h3"/>
-    </g>
-    <g fill="none" stroke="{orange}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M1007 87l-10 10 10 10M1025 87l10 10-10 10M1020 83l-8 28"/>
-    </g>
-    <g fill="{violet}">
-      <path d="M1010 279h28v7h7v24h-7v-7h-7v7h-7v-7h-7v7h-7z"/>
-      <path d="M1010 272h7v14h-7zM1031 272h7v14h-7z"/>
-    </g>
-    <g fill="{bg}"><rect x="1017" y="286" width="5" height="5"/><rect x="1031" y="286" width="5" height="5"/></g>
-    <circle cx="760" cy="278" r="5" fill="{orange}"/>
-    <path d="M765 57v12m-6-6h12M983 215v12m-6-6h12" stroke="{muted}"/>
-    ''' + text(657, 161, "INFRA", size=12, mono=True, fill="muted") + text(992, 148, "TOOLS", size=12, mono=True, fill="muted") + text(1002, 344, "PLAY", size=12, mono=True, fill="muted")
-
-
-def header(theme, mobile=False):
-    if mobile:
-        w, h = 640, 620
-        body = '''<rect width="640" height="620" rx="24" fill="{bg}"/>
-        <rect x="1" y="1" width="638" height="618" rx="23" fill="none" stroke="{line}"/>
-        <path d="M30 85H610M30 550H610" stroke="{line}"/>
-        <rect x="290" y="150" width="320" height="375" fill="url(#grid)"/>'''
-        body += text(32, 53, "ETOSHEARTEM", size=21, mono=True)
-        body += text(608, 53, "PERSONAL WORKSHOP", size=13, mono=True, fill="muted", extra='text-anchor="end"')
-        body += text(28, 230, "ARTEM", size=139, weight=800, extra='letter-spacing="-9"')
-        body += text(34, 280, "SYSTEMS &", size=38, weight=700)
-        body += text(34, 325, "SIDE QUESTS", size=38, weight=700)
-        body += '<g transform="translate(-200 216) scale(.78)">' + routing_art() + '</g>'
-        body += text(34, 417, "Cloud. Code.", size=23, fill="muted")
-        body += text(34, 453, "Curiosity.", size=23, fill="muted")
-        body += text(32, 591, "DEVOPS / PYTHON / LINUX", size=18, mono=True)
-        body += text(608, 591, "↗", size=30, fill="accent", extra='text-anchor="end"')
-    else:
-        w, h = 1120, 430
-        body = '''<rect width="1120" height="430" rx="24" fill="{bg}"/>
-        <rect x="1" y="1" width="1118" height="428" rx="23" fill="none" stroke="{line}"/>
-        <rect x="610" y="70" width="485" height="280" fill="url(#grid)"/>
-        <path d="M36 76H1084M36 363H1084" stroke="{line}"/>'''
-        body += text(38, 48, "ETOSHEARTEM", size=16, mono=True)
-        body += text(1082, 48, "PERSONAL WORKSHOP / 01", size=13, mono=True, fill="muted", extra='text-anchor="end"')
-        body += text(28, 225, "ARTEM", size=172, weight=800, extra='letter-spacing="-11"')
-        body += text(38, 279, "SYSTEMS & SIDE QUESTS", size=31, weight=700, extra='letter-spacing="1"')
-        body += text(39, 320, "Cloud. Code. Curiosity.", size=21, fill="muted")
-        body += routing_art()
-        body += text(38, 403, "DEVOPS / PYTHON / LINUX", size=15, mono=True)
-        body += text(1082, 403, "BUILD THINGS. FIGURE THEM OUT.", size=13, mono=True, fill="muted", extra='text-anchor="end"')
-    return svg(w, h, "Artem — systems & side quests", "Личная мастерская Артёма: инфраструктура, инструменты и игры. DevOps, Python, Linux.", body, theme)
-
-
-def project(theme, kind, wide=False):
-    width = 1120 if wide else 520
-    body = f'''<rect width="{width}" height="220" rx="16" fill="{{bg}}"/>
-    <rect x="1" y="1" width="{width-2}" height="218" rx="15" fill="none" stroke="{{line}}"/>
-    <rect x="{width-260}" y="18" width="240" height="185" fill="url(#grid)"/>'''
-    if wide:
-        body += '''<path d="M564 111H899" stroke="{line}" stroke-dasharray="2 7"/>
-        <circle cx="564" cy="111" r="4" fill="{line}"/>'''
-        body += text(580, 100, "REPAIR / REPEAT" if kind == "patch" else "REVISIT / REBUILD", size=13, mono=True, fill="muted")
-    if kind == "patch":
-        body += text(26, 38, "01 / UTILITY", size=15, mono=True, fill="muted")
-        body += text(24, 101, "ag-repatch", size=50 if wide else 36, weight=700, extra='letter-spacing="-1"')
-        body += text(26, 142, "Back in working order.", size=22 if wide else 17, fill="muted")
-        body += text(26, 192, "PYTHON", size=14, mono=True, fill="accent")
-        body += f'<g transform="translate({1005 if wide else 405} 111)">'
-        body += '''
-          <rect x="-57" y="-62" width="114" height="124" rx="16" fill="{panel}" stroke="{line}" transform="rotate(10)"/>
-          <rect x="-57" y="-62" width="114" height="124" rx="16" fill="{bg}" stroke="{line}"/>
-          <path d="M-57-29H57" stroke="{line}"/>
-          <circle cx="-40" cy="-45" r="3" fill="{orange}"/>
-          <circle cx="-28" cy="-45" r="3" fill="{muted}"/>
-          <path d="M-25 1a29 29 0 1 1 0 28" fill="none" stroke="{accent}" stroke-width="5" stroke-linecap="round"/>
-          <path d="M-27-10v15h15" fill="none" stroke="{accent}" stroke-width="5" stroke-linejoin="round"/>
-          <path d="M-7 15l8 8 14-16" fill="none" stroke="{accent}" stroke-width="4" stroke-linejoin="round"/>
-        </g>'''
-        title, description = "ag-repatch", "Python-инструмент для восстановления локального патча Antigravity после обновлений."
-    else:
-        body += text(26, 38, "02 / SIDE QUEST", size=15, mono=True, fill="muted")
-        body += text(24, 101, "Ловец душ", size=50 if wide else 36, weight=700, extra='letter-spacing="-1"')
-        body += text(26, 142, "A second life for 2007.", size=22 if wide else 17, fill="muted")
-        body += text(26, 192, "GODOT / ANDROID", size=14, mono=True, fill="orange")
-        body += f'<g transform="translate({1004 if wide else 404} 111) rotate(9)">'
-        body += '''
-          <rect x="-48" y="-86" width="96" height="172" rx="17" fill="{panel}" stroke="{line}" stroke-width="2"/>
-          <path d="M-10-72h20" stroke="{muted}" stroke-width="3" stroke-linecap="round"/>
-          <rect x="-35" y="-59" width="70" height="85" rx="5" fill="{bg}" stroke="{line}"/>
-          <path d="M-21-31h7v-9h7v9h14v-9h7v9h7v35h-7v-7h-7v7h-7v-7h-7v7h-7v-7h-7z" fill="{orange}"/>
-          <rect x="-12" y="-21" width="7" height="7" fill="{bg}"/>
-          <rect x="5" y="-21" width="7" height="7" fill="{bg}"/>
-          <circle cy="44" r="8" fill="none" stroke="{muted}" stroke-width="2"/>
-          <path d="M-29 44h9M20 44h9M-27 64h12M-6 64h12M15 64h12" stroke="{line}" stroke-width="4" stroke-linecap="round"/>
-        </g>'''
-        body += f'<g transform="translate({600 if wide else 0} 0)"><path d="M476 45v14m-7-7h14M329 169v10m-5-5h10" stroke="{{violet}}" stroke-width="2"/></g>'
-        title, description = "Ловец душ", "Фанатский ремейк J2ME-квеста 2007 года для Android на Godot."
-    return svg(width, 220, title, description, body, theme)
 
 
 def main():
@@ -169,12 +162,8 @@ def main():
     for theme in THEMES:
         for mobile in (False, True):
             suffix = "-mobile" if mobile else ""
-            (ASSETS / f"header-{theme}{suffix}.svg").write_text(header(theme, mobile), encoding="utf-8")
-        for kind in ("patch", "game"):
-            for wide in (False, True):
-                suffix = "-wide" if wide else ""
-                (ASSETS / f"project-{kind}-{theme}{suffix}.svg").write_text(project(theme, kind, wide), encoding="utf-8")
-    print("Generated 12 profile illustrations.")
+            (ASSETS / f"cluster-{theme}{suffix}.svg").write_text(header(theme, mobile), encoding="utf-8")
+    print("Generated four Kubernetes profile illustrations.")
 
 
 if __name__ == "__main__":

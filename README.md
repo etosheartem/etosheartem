@@ -1,60 +1,38 @@
 <picture>
-  <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/header-dark-mobile.svg">
-  <source media="(max-width: 600px)" srcset="assets/header-light-mobile.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg">
-  <img src="assets/header-light.svg" width="100%" alt="Artem — Systems &amp; Side Quests. DevOps, Python, Linux.">
+  <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/cluster-dark-mobile.svg">
+  <source media="(max-width: 600px)" srcset="assets/cluster-light-mobile.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/cluster-dark.svg">
+  <img src="assets/cluster-light.svg" width="100%" alt="Артём / Kubernetes. Имя ARTEM собрано из подов на пяти узлах; исчезнувший под восстанавливается в цикле reconciliation.">
 </picture>
 
-### Привет, я Артём.
+## Артём. Kubernetes, Linux, автоматизация.
 
-Занимаюсь облачной инфраструктурой, пишу на Python и обживаю Linux. Люблю разбираться, как всё устроено: от Kubernetes и домашней лаборатории до внутренностей приложений и игр с кнопочных телефонов.
+Cloud & DevOps Engineer. **Kubernetes — мой основной фокус**: инфраструктура, контейнеры, Helm и всё, что связывает их в работающую систему. Пишу на Python и Go, автоматизирую повторяющиеся операции и делаю внутренние инструменты.
 
-**Автоматизировать рутину. Починить неудобное. Вернуть к жизни интересное.**
+Разбираюсь в проблемах по слоям: приложение → контейнер → Linux → сеть. Нравится понимать, что происходит между `kubectl apply` и работающим сервисом.
 
-<br>
+### Ниже по стеку
 
-### Из моей мастерской
+| Слой | Инструменты |
+| :--- | :--- |
+| **Кластер и контейнеры** | **Kubernetes** · Helm · Docker |
+| **Автоматизация** | Python · Go · Bash · GitHub Actions |
+| **Системы и сеть** | Linux · KVM/QEMU · MikroTik · WireGuard |
+| **Данные** | PostgreSQL · Redis |
 
-<a href="https://github.com/etosheartem/ag-repatch">
-  <picture>
-    <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/project-patch-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/project-patch-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/project-patch-dark-wide.svg">
-    <img src="assets/project-patch-light-wide.svg" width="100%" alt="ag-repatch — Python-инструмент для Antigravity">
-  </picture>
-</a>
+<details>
+<summary>Домашняя лаборатория и другие интересы</summary>
 
-**[ag-repatch](https://github.com/etosheartem/ag-repatch)** восстанавливает локальный патч Antigravity после обновлений: находит установку, сохраняет оригиналы и применяет патч заново.
+Arch Linux, виртуальные машины, сети и автоматизация. Ещё — AI-агенты, Telegram-боты и реверс-инжиниринг. Часть идей остаётся экспериментами, часть становится отдельными проектами.
 
-`Python` · Windows / macOS / Linux · **[Скачать →](https://github.com/etosheartem/ag-repatch/releases)**
+</details>
 
-<br>
+### Вне кластера
 
-<a href="https://github.com/etosheartem/lovec-dush">
-  <picture>
-    <source media="(prefers-color-scheme: dark) and (max-width: 600px)" srcset="assets/project-game-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/project-game-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/project-game-dark-wide.svg">
-    <img src="assets/project-game-light-wide.svg" width="100%" alt="Ловец душ — ремейк J2ME-квеста 2007 года">
-  </picture>
-</a>
+**[ag-repatch ↗](https://github.com/etosheartem/ag-repatch)** — Python-инструмент, который восстанавливает локальный патч Antigravity после обновлений. Windows, macOS и Linux. [Релизы](https://github.com/etosheartem/ag-repatch/releases).
 
-**[Ловец душ](https://github.com/etosheartem/lovec-dush)** — фанатский ремейк квеста с кнопочного телефона для Android. Тот же сюжет и загадки; новая графика, звук и управление.
-
-`Godot` · GDScript / Android · **[Скачать →](https://github.com/etosheartem/lovec-dush/releases)**
-
-<br>
-
-### Под рукой
-
-**Инфраструктура** &nbsp; `Linux` `Kubernetes` `Docker` `Helm` `GitHub Actions`<br>
-**Код и данные** &nbsp; `Python` `Go` `Bash` `PostgreSQL` `Redis`<br>
-**Домашняя лаборатория** &nbsp; `Arch` `KVM / QEMU` `MikroTik` `WireGuard`
-
-А ещё — AI-агенты, реверс-инжиниринг и идеи, ради которых хочется открыть редактор вечером.
+**[Ловец душ ↗](https://github.com/etosheartem/lovec-dush)** — фанатский ремейк J2ME-квеста 2007 года на Godot для Android. Разобрал оригинал и перенёс сюжет и загадки, добавив новую графику и звук. [Скачать](https://github.com/etosheartem/lovec-dush/releases).
 
 ---
 
-**Есть о чём поговорить?** [Telegram ↗](https://t.me/etosheartem)
-
-<sub>etosheartem / systems &amp; side quests</sub>
+<a href="https://t.me/etosheartem"><strong>Telegram / @etosheartem ↗</strong></a>
