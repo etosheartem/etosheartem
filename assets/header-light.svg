@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="430"
+  viewBox="0 0 1120 430" role="img" aria-labelledby="title description">
+  <title id="title">Artem — systems &amp; side quests</title>
+  <desc id="description">Личная мастерская Артёма: инфраструктура, инструменты и игры. DevOps, Python, Linux.</desc>
+  <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="0.8" fill="#bdc7b3"/>
+  </pattern></defs>
+  <style>
+    .flow { stroke-dasharray: 4 16; animation: flow 18s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -160; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+  <rect width="1120" height="430" rx="24" fill="#f3f2e8"/>
+        <rect x="1" y="1" width="1118" height="428" rx="23" fill="none" stroke="#bdc7b3"/>
+        <rect x="610" y="70" width="485" height="280" fill="url(#grid)"/>
+        <path d="M36 76H1084M36 363H1084" stroke="#bdc7b3"/><text x="38" y="48" fill="#202c22" font-size="16" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >ETOSHEARTEM</text><text x="1082" y="48" fill="#596752" font-size="13" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" text-anchor="end">PERSONAL WORKSHOP / 01</text><text x="28" y="225" fill="#202c22" font-size="172" font-weight="800" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" letter-spacing="-11">ARTEM</text><text x="38" y="279" fill="#202c22" font-size="31" font-weight="700" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" letter-spacing="1">SYSTEMS &amp; SIDE QUESTS</text><text x="39" y="320" fill="#596752" font-size="21" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >Cloud. Code. Curiosity.</text>
+    <circle cx="878" cy="199" r="142" fill="none" stroke="#bdc7b3"/>
+    <circle cx="878" cy="199" r="110" fill="none" stroke="#bdc7b3" stroke-dasharray="2 10"/>
+    <path d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
+      fill="none" stroke="#bdc7b3" stroke-width="2"/>
+    <path class="flow" d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
+      fill="none" stroke="#507628" stroke-width="2"/>
+    <g transform="translate(878 199)">
+      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="#f3f2e8" stroke="#bdc7b3" transform="rotate(-21)"/>
+      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="#e7e9dc" stroke="#bdc7b3" transform="rotate(-10)"/>
+      <rect x="-61" y="-61" width="122" height="122" rx="22" fill="#507628"/>
+      <path d="M-31 23L-3-29H9L36 23M-19 1H22M-4 24H9" fill="none"
+        stroke="#f8f7ef" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter"/>
+    </g>
+    <g fill="#f3f2e8" stroke="#bdc7b3" stroke-width="1.5">
+      <rect x="654" y="77" width="62" height="62" rx="14"/>
+      <rect x="985" y="66" width="62" height="62" rx="14"/>
+      <rect x="993" y="261" width="62" height="62" rx="14"/>
+    </g>
+    <g fill="none" stroke="#507628" stroke-width="2">
+      <rect x="670" y="91" width="30" height="12" rx="2"/>
+      <rect x="670" y="111" width="30" height="12" rx="2"/>
+      <path d="M675 97h3M675 117h3"/>
+    </g>
+    <g fill="none" stroke="#a65328" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1007 87l-10 10 10 10M1025 87l10 10-10 10M1020 83l-8 28"/>
+    </g>
+    <g fill="#7553a4">
+      <path d="M1010 279h28v7h7v24h-7v-7h-7v7h-7v-7h-7v7h-7z"/>
+      <path d="M1010 272h7v14h-7zM1031 272h7v14h-7z"/>
+    </g>
+    <g fill="#f3f2e8"><rect x="1017" y="286" width="5" height="5"/><rect x="1031" y="286" width="5" height="5"/></g>
+    <circle cx="760" cy="278" r="5" fill="#a65328"/>
+    <path d="M765 57v12m-6-6h12M983 215v12m-6-6h12" stroke="#596752"/>
+    <text x="657" y="161" fill="#596752" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >INFRA</text><text x="992" y="148" fill="#596752" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >TOOLS</text><text x="1002" y="344" fill="#596752" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >PLAY</text><text x="38" y="403" fill="#202c22" font-size="15" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >DEVOPS / PYTHON / LINUX</text><text x="1082" y="403" fill="#596752" font-size="13" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" text-anchor="end">BUILD THINGS. FIGURE THEM OUT.</text>
+</svg>

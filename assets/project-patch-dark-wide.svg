@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="220"
+  viewBox="0 0 1120 220" role="img" aria-labelledby="title description">
+  <title id="title">ag-repatch</title>
+  <desc id="description">Python-инструмент для восстановления локального патча Antigravity после обновлений.</desc>
+  <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="0.8" fill="#344638"/>
+  </pattern></defs>
+  <style>
+    .flow { stroke-dasharray: 4 16; animation: flow 18s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -160; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+  <rect width="1120" height="220" rx="16" fill="#111914"/>
+    <rect x="1" y="1" width="1118" height="218" rx="15" fill="none" stroke="#344638"/>
+    <rect x="860" y="18" width="240" height="185" fill="url(#grid)"/><path d="M564 111H899" stroke="#344638" stroke-dasharray="2 7"/>
+        <circle cx="564" cy="111" r="4" fill="#344638"/><text x="580" y="100" fill="#a4b2a2" font-size="13" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >REPAIR / REPEAT</text><text x="26" y="38" fill="#a4b2a2" font-size="15" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >01 / UTILITY</text><text x="24" y="101" fill="#f1f3e8" font-size="50" font-weight="700" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" letter-spacing="-1">ag-repatch</text><text x="26" y="142" fill="#a4b2a2" font-size="22" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >Back in working order.</text><text x="26" y="192" fill="#c5f277" font-size="14" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >PYTHON</text><g transform="translate(1005 111)">
+          <rect x="-57" y="-62" width="114" height="124" rx="16" fill="#19231c" stroke="#344638" transform="rotate(10)"/>
+          <rect x="-57" y="-62" width="114" height="124" rx="16" fill="#111914" stroke="#344638"/>
+          <path d="M-57-29H57" stroke="#344638"/>
+          <circle cx="-40" cy="-45" r="3" fill="#ffc18c"/>
+          <circle cx="-28" cy="-45" r="3" fill="#a4b2a2"/>
+          <path d="M-25 1a29 29 0 1 1 0 28" fill="none" stroke="#c5f277" stroke-width="5" stroke-linecap="round"/>
+          <path d="M-27-10v15h15" fill="none" stroke="#c5f277" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M-7 15l8 8 14-16" fill="none" stroke="#c5f277" stroke-width="4" stroke-linejoin="round"/>
+        </g>
+</svg>

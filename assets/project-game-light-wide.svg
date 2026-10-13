@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="220"
+  viewBox="0 0 1120 220" role="img" aria-labelledby="title description">
+  <title id="title">Ловец душ</title>
+  <desc id="description">Фанатский ремейк J2ME-квеста 2007 года для Android на Godot.</desc>
+  <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="0.8" fill="#bdc7b3"/>
+  </pattern></defs>
+  <style>
+    .flow { stroke-dasharray: 4 16; animation: flow 18s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -160; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+  <rect width="1120" height="220" rx="16" fill="#f3f2e8"/>
+    <rect x="1" y="1" width="1118" height="218" rx="15" fill="none" stroke="#bdc7b3"/>
+    <rect x="860" y="18" width="240" height="185" fill="url(#grid)"/><path d="M564 111H899" stroke="#bdc7b3" stroke-dasharray="2 7"/>
+        <circle cx="564" cy="111" r="4" fill="#bdc7b3"/><text x="580" y="100" fill="#596752" font-size="13" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >REVISIT / REBUILD</text><text x="26" y="38" fill="#596752" font-size="15" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >02 / SIDE QUEST</text><text x="24" y="101" fill="#202c22" font-size="50" font-weight="700" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" letter-spacing="-1">Ловец душ</text><text x="26" y="142" fill="#596752" font-size="22" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >A second life for 2007.</text><text x="26" y="192" fill="#a65328" font-size="14" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >GODOT / ANDROID</text><g transform="translate(1004 111) rotate(9)">
+          <rect x="-48" y="-86" width="96" height="172" rx="17" fill="#e7e9dc" stroke="#bdc7b3" stroke-width="2"/>
+          <path d="M-10-72h20" stroke="#596752" stroke-width="3" stroke-linecap="round"/>
+          <rect x="-35" y="-59" width="70" height="85" rx="5" fill="#f3f2e8" stroke="#bdc7b3"/>
+          <path d="M-21-31h7v-9h7v9h14v-9h7v9h7v35h-7v-7h-7v7h-7v-7h-7v7h-7v-7h-7z" fill="#a65328"/>
+          <rect x="-12" y="-21" width="7" height="7" fill="#f3f2e8"/>
+          <rect x="5" y="-21" width="7" height="7" fill="#f3f2e8"/>
+          <circle cy="44" r="8" fill="none" stroke="#596752" stroke-width="2"/>
+          <path d="M-29 44h9M20 44h9M-27 64h12M-6 64h12M15 64h12" stroke="#bdc7b3" stroke-width="4" stroke-linecap="round"/>
+        </g><g transform="translate(600 0)"><path d="M476 45v14m-7-7h14M329 169v10m-5-5h10" stroke="#7553a4" stroke-width="2"/></g>
+</svg>

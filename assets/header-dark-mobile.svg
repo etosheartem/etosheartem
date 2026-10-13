@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="620"
+  viewBox="0 0 640 620" role="img" aria-labelledby="title description">
+  <title id="title">Artem — systems &amp; side quests</title>
+  <desc id="description">Личная мастерская Артёма: инфраструктура, инструменты и игры. DevOps, Python, Linux.</desc>
+  <defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="0.8" fill="#344638"/>
+  </pattern></defs>
+  <style>
+    .flow { stroke-dasharray: 4 16; animation: flow 18s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -160; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+  <rect width="640" height="620" rx="24" fill="#111914"/>
+        <rect x="1" y="1" width="638" height="618" rx="23" fill="none" stroke="#344638"/>
+        <path d="M30 85H610M30 550H610" stroke="#344638"/>
+        <rect x="290" y="150" width="320" height="375" fill="url(#grid)"/><text x="32" y="53" fill="#f1f3e8" font-size="21" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >ETOSHEARTEM</text><text x="608" y="53" fill="#a4b2a2" font-size="13" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" text-anchor="end">PERSONAL WORKSHOP</text><text x="28" y="230" fill="#f1f3e8" font-size="139" font-weight="800" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" letter-spacing="-9">ARTEM</text><text x="34" y="280" fill="#f1f3e8" font-size="38" font-weight="700" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >SYSTEMS &amp;</text><text x="34" y="325" fill="#f1f3e8" font-size="38" font-weight="700" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >SIDE QUESTS</text><g transform="translate(-200 216) scale(.78)">
+    <circle cx="878" cy="199" r="142" fill="none" stroke="#344638"/>
+    <circle cx="878" cy="199" r="110" fill="none" stroke="#344638" stroke-dasharray="2 10"/>
+    <path d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
+      fill="none" stroke="#344638" stroke-width="2"/>
+    <path class="flow" d="M686 108H765L818 161M898 175L951 97H1017M902 229L968 292H1024"
+      fill="none" stroke="#c5f277" stroke-width="2"/>
+    <g transform="translate(878 199)">
+      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="#111914" stroke="#344638" transform="rotate(-21)"/>
+      <rect x="-67" y="-67" width="134" height="134" rx="24" fill="#19231c" stroke="#344638" transform="rotate(-10)"/>
+      <rect x="-61" y="-61" width="122" height="122" rx="22" fill="#c5f277"/>
+      <path d="M-31 23L-3-29H9L36 23M-19 1H22M-4 24H9" fill="none"
+        stroke="#162014" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter"/>
+    </g>
+    <g fill="#111914" stroke="#344638" stroke-width="1.5">
+      <rect x="654" y="77" width="62" height="62" rx="14"/>
+      <rect x="985" y="66" width="62" height="62" rx="14"/>
+      <rect x="993" y="261" width="62" height="62" rx="14"/>
+    </g>
+    <g fill="none" stroke="#c5f277" stroke-width="2">
+      <rect x="670" y="91" width="30" height="12" rx="2"/>
+      <rect x="670" y="111" width="30" height="12" rx="2"/>
+      <path d="M675 97h3M675 117h3"/>
+    </g>
+    <g fill="none" stroke="#ffc18c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1007 87l-10 10 10 10M1025 87l10 10-10 10M1020 83l-8 28"/>
+    </g>
+    <g fill="#c4b5fd">
+      <path d="M1010 279h28v7h7v24h-7v-7h-7v7h-7v-7h-7v7h-7z"/>
+      <path d="M1010 272h7v14h-7zM1031 272h7v14h-7z"/>
+    </g>
+    <g fill="#111914"><rect x="1017" y="286" width="5" height="5"/><rect x="1031" y="286" width="5" height="5"/></g>
+    <circle cx="760" cy="278" r="5" fill="#ffc18c"/>
+    <path d="M765 57v12m-6-6h12M983 215v12m-6-6h12" stroke="#a4b2a2"/>
+    <text x="657" y="161" fill="#a4b2a2" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >INFRA</text><text x="992" y="148" fill="#a4b2a2" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >TOOLS</text><text x="1002" y="344" fill="#a4b2a2" font-size="12" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >PLAY</text></g><text x="34" y="417" fill="#a4b2a2" font-size="23" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >Cloud. Code.</text><text x="34" y="453" fill="#a4b2a2" font-size="23" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" >Curiosity.</text><text x="32" y="591" fill="#f1f3e8" font-size="18" font-weight="400" font-family="'DejaVu Sans Mono', Consolas, monospace" >DEVOPS / PYTHON / LINUX</text><text x="608" y="591" fill="#c5f277" font-size="30" font-weight="400" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" text-anchor="end">↗</text>
+</svg>
