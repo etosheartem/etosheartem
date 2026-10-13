@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="102"
+  viewBox="0 0 1120 102" role="img" aria-labelledby="title">
+  <title id="title">Открыть инцидент 03: CPU свободен. Места нет.</title>
+  <style>
+    .signal { animation: signal 4s ease-in-out infinite; }
+    @keyframes signal { 0%,100% { opacity:.4; } 50% { opacity:1; } }
+    @media (prefers-reduced-motion: reduce) { .signal { animation:none; } }
+  </style>
+  <rect x="1" y="1" width="1118" height="100" rx="7" fill="#111b2b" stroke="#28374e"/><path d="M1 15V87" stroke="#f8c77c" stroke-width="3"/><text x="25" y="60" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="27" font-weight="400" fill="#f8c77c" >03</text><text x="89" y="45" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="30" font-weight="700" fill="#edf3ff" >CPU свободен. Места нет.</text><text x="90" y="77" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="14" font-weight="400" fill="#95a8c6" >SCHEDULING</text><text x="1080" y="61" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="35" font-weight="400" fill="#8abfff" text-anchor="end">+</text>
+</svg>

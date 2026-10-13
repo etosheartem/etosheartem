@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="324"
+  viewBox="0 0 640 324" role="img" aria-labelledby="title">
+  <title id="title">Night Shift — интерактивная смена дежурного Kubernetes</title>
+  <style>
+    .signal { animation: signal 4s ease-in-out infinite; }
+    @keyframes signal { 0%,100% { opacity:.4; } 50% { opacity:1; } }
+    @media (prefers-reduced-motion: reduce) { .signal { animation:none; } }
+  </style>
+  <rect width="640" height="324" rx="12" fill="#090e18"/><rect x="1" y="1" width="638" height="322" rx="11" fill="none" stroke="#28374e"/><circle class="signal" cx="31" cy="34" r="5" fill="#f8c77c"/><text x="47" y="40" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="15" font-weight="400" fill="#f8c77c" >03:17 / ON CALL</text><text x="612" y="40" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="14" font-weight="400" fill="#95a8c6" text-anchor="end">KUBERNETES LAB</text><text x="26" y="125" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="66" font-weight="800" fill="#edf3ff" letter-spacing="-3">NIGHT SHIFT</text><text x="30" y="178" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="31" font-weight="400" fill="#edf3ff" >Прод падает.</text><text x="30" y="219" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="31" font-weight="400" fill="#edf3ff" >Твоя смена.</text><path d="M30 252H610" stroke="#28374e"/><text x="30" y="290" font-family="'DejaVu Sans Mono', Consolas, monospace" font-size="19" font-weight="400" fill="#8abfff" >3 ИНЦИДЕНТА / 9 РЕШЕНИЙ</text><text x="610" y="290" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="30" font-weight="400" fill="#8abfff" text-anchor="end">↓</text>
+</svg>

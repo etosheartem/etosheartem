@@ -1,0 +1,161 @@
+[
+  {
+    "id": "routing",
+    "number": "01",
+    "title": "Зелёные поды. Мёртвый сайт.",
+    "mobile_title": ["Зелёные поды.", "Мёртвый сайт."],
+    "tag": "ROUTING",
+    "brief": "После релиза внешний запрос получает 503 от ingress. Оба пода api готовы к работе. Дежурный в чате предлагает «просто рестартнуть». Сначала собери факты.",
+    "probes": [
+      {
+        "label": "Проверить поды и labels",
+        "command": "kubectl -n arcade get pods --show-labels",
+        "output": "NAME    READY  STATUS   LABELS\napi-a   1/1    Running  app=api-v2\napi-b   1/1    Running  app=api-v2",
+        "note": "Оба контейнера готовы. Обрати внимание на labels."
+      },
+      {
+        "label": "Посмотреть конфигурацию Service",
+        "command": "kubectl -n arcade get svc api -o yaml",
+        "output": "# значимый фрагмент\nspec:\n  selector:\n    app: api-v1\n  ports:\n    - port: 80\n      targetPort: 8080",
+        "note": "Приложение слушает 8080; порт совпадает."
+      },
+      {
+        "label": "Проверить EndpointSlice",
+        "command": "kubectl -n arcade get endpointslice api-x -o yaml",
+        "output": "# значимый фрагмент\nmetadata:\n  labels:\n    kubernetes.io/service-name: api\nendpoints: []",
+        "note": "У Service нет backend-адресов."
+      }
+    ],
+    "choices": [
+      {
+        "id": "restart",
+        "label": "Перезапустить Deployment",
+        "success": false,
+        "output": "rollout: complete\npods: 2/2 Ready\nservice endpoints: 0\nexternal request: HTTP 503",
+        "explanation": "Новые поды получили прежние labels. Перезапуск не изменил selector Service — выбирать по-прежнему некого."
+      },
+      {
+        "id": "selector",
+        "label": "Исправить selector Service",
+        "success": true,
+        "output": "selector: app=api-v2\nready endpoints: 2\nexternal request: HTTP 200",
+        "explanation": "Selector api-v1 не совпадал с labels api-v2. Исправление в манифесте Service или Helm values возвращает маршрутизацию и сохраняется при следующих релизах."
+      },
+      {
+        "id": "replicas",
+        "label": "Увеличить число реплик до пяти",
+        "success": false,
+        "output": "pods: 5/5 Ready\nservice endpoints: 0\nexternal request: HTTP 503",
+        "explanation": "Теперь в кластере больше здоровых подов, до которых не доходят запросы. Масштабирование не исправляет несовпадение labels."
+      }
+    ],
+    "lesson": "Running и Ready — ещё не проверка пути от клиента до приложения.",
+    "source": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/"
+  },
+  {
+    "id": "memory",
+    "number": "02",
+    "title": "Восемь секунд до рестарта.",
+    "mobile_title": ["Восемь секунд", "до рестарта."],
+    "tag": "MEMORY",
+    "brief": "Worker стартует, загружает справочник и пропадает. Перезапуски повторяются. На узле есть свободная память; новая версия справочника стала больше.",
+    "probes": [
+      {
+        "label": "Узнать причину завершения",
+        "command": "kubectl -n arcade describe pod worker-a",
+        "output": "# значимый фрагмент\nState:          Waiting\n  Reason:       CrashLoopBackOff\nLast State:     Terminated\n  Reason:       OOMKilled\n  Exit Code:    137\nRestart Count:  7",
+        "note": "CrashLoopBackOff описывает повторные падения. Причину ищи в Last State."
+      },
+      {
+        "label": "Прочитать предыдущие логи",
+        "command": "kubectl -n arcade logs worker-a --previous",
+        "output": "[boot] worker starting\n[cache] loading reference dataset\n[cache] allocating 96 MiB\n<process terminated>",
+        "note": "Нужны логи предыдущего контейнера, а не только нового запуска."
+      },
+      {
+        "label": "Сверить лимиты и замеры",
+        "command": "kubectl -n arcade get deploy worker -o yaml",
+        "output": "# resources контейнера worker\nrequests:\n  memory: 64Mi\nlimits:\n  memory: 64Mi",
+        "note": "В учебном нагрузочном отчёте этой сборки: обычное потребление 120–140 MiB, пик 148 MiB, последующего роста нет. Узел позволяет выделить 256 MiB."
+      }
+    ],
+    "choices": [
+      {
+        "id": "probe",
+        "label": "Отключить liveness probe",
+        "success": false,
+        "output": "liveness probe: disabled\nlast termination: OOMKilled\nrestart count: 8",
+        "explanation": "Контейнер завершился из-за памяти. Отключение probe не отменяет memory limit."
+      },
+      {
+        "id": "scale",
+        "label": "Добавить ещё две реплики",
+        "success": false,
+        "output": "worker-a: OOMKilled\nworker-b: OOMKilled\nworker-c: OOMKilled",
+        "explanation": "Каждая реплика загружает тот же справочник в свой контейнер с тем же лимитом 64 MiB."
+      },
+      {
+        "id": "budget",
+        "label": "Выделить память по результатам замеров",
+        "success": true,
+        "output": "requests.memory: 160Mi\nlimits.memory:   256Mi\nrollout: complete\nworker: Ready\nobserved RSS: 136Mi",
+        "explanation": "Запрос покрывает измеренное потребление, лимит оставляет запас. После обновления шаблона Deployment и rollout нужно повторить нагрузочную проверку. Если потребление продолжит расти, отдельно искать утечку."
+      }
+    ],
+    "lesson": "Повторный запуск не увеличивает cgroup memory limit.",
+    "source": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  },
+  {
+    "id": "scheduling",
+    "number": "03",
+    "title": "CPU свободен. Места нет.",
+    "mobile_title": ["CPU свободен.", "Места нет."],
+    "tag": "SCHEDULING",
+    "brief": "Deployment увеличили с двух реплик до трёх. Новая реплика висит в Pending. На графике CPU меньше 20% — почему scheduler отказывается её разместить?",
+    "probes": [
+      {
+        "label": "Прочитать событие scheduler",
+        "command": "kubectl -n arcade describe pod api-c",
+        "output": "# значимый фрагмент\nStatus: Pending\nNode:   <none>\nReason: FailedScheduling\n0/2 nodes are available:\n  2 Insufficient cpu.\nContainer CPU request: 500m",
+        "note": "Не хватает CPU по правилам размещения. Других ограничений в этом стенде нет."
+      },
+      {
+        "label": "Проверить текущую загрузку",
+        "command": "kubectl top nodes",
+        "output": "NAME      CPU(cores)  CPU%\nworker-a  320m        16%\nworker-b  360m        18%",
+        "note": "Это фактическое использование CPU в момент измерения."
+      },
+      {
+        "label": "Проверить allocatable и requests",
+        "command": "kubectl describe nodes worker-a worker-b",
+        "output": "# сокращённая сводка по двум узлам\nworker-a:\n  allocatable.cpu: 2000m\n  allocated CPU requests: 1800m\nworker-b:\n  allocatable.cpu: 2000m\n  allocated CPU requests: 1800m",
+        "note": "На каждом узле остаётся 200m незарезервированного CPU. Новому поду нужно 500m на одном узле."
+      }
+    ],
+    "choices": [
+      {
+        "id": "scheduler",
+        "label": "Перезапустить scheduler",
+        "success": false,
+        "output": "scheduler: available\napi-c: Pending\nreason: Insufficient cpu",
+        "explanation": "Scheduler работает правильно. После перезапуска он видит те же requests и тот же объём allocatable CPU."
+      },
+      {
+        "id": "capacity",
+        "label": "Добавить ёмкость в node pool",
+        "success": true,
+        "output": "worker-c: Ready\nallocatable.cpu: 2000m\napi-c scheduled on worker-c\ndeployment api: 3/3 Ready",
+        "explanation": "На новом узле есть место для CPU request 500m. Scheduler размещает под по requests и allocatable, а не по моментальному графику использования CPU."
+      },
+      {
+        "id": "toleration",
+        "label": "Добавить toleration",
+        "success": false,
+        "output": "toleration: added\napi-c: Pending\nreason: Insufficient cpu",
+        "explanation": "Toleration помогает с taints, но не добавляет ресурсы. Событие scheduler указывало на CPU, а не на taint."
+      }
+    ],
+    "lesson": "Низкая утилизация и свободная ёмкость для requests — разные величины.",
+    "source": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  }
+]
